@@ -1,0 +1,645 @@
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#142f60">
+<title>HYPR</title>
+<style>
+:root {
+  --navy:#142f60;
+  --navy2:#1d4078;
+  --cream:#fffaf0;
+  --pink:#e83e87;
+  --orange:#ff914d;
+  --text:#172b4d;
+  --muted:#75819a;
+  --line:#e9e5dc;
+  --softpink:#fbe5ef;
+  --softorange:#fff0e4;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:var(--navy);
+  color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  padding-bottom:95px;
+  min-height:100vh;
+}
+.decor{
+  position:fixed;
+  top:0;right:0;
+  width:min(95vw,420px);
+  height:500px;
+  pointer-events:none;
+  z-index:0;
+  opacity:.95;
+}
+header,nav,main,.bottom-nav{position:relative;z-index:1}
+header{
+  padding:28px 21px 17px;
+  color:white;
+}
+.brand{
+  font-size:34px;
+  font-weight:900;
+  letter-spacing:4px;
+}
+.tagline{
+  margin-top:5px;
+  color:#d7e2f5;
+  font-size:13px;
+  letter-spacing:1px;
+}
+nav{
+  display:flex;
+  gap:8px;
+  overflow-x:auto;
+  padding:10px 14px;
+  background:rgba(20,47,96,.94);
+  position:sticky;
+  top:0;
+  z-index:5;
+  scrollbar-width:none;
+}
+nav button{
+  border:1px solid #54709d;
+  border-radius:30px;
+  background:transparent;
+  color:white;
+  padding:11px 15px;
+  white-space:nowrap;
+  font-size:13px;
+  font-weight:650;
+}
+nav button.active{
+  background:var(--cream);
+  color:var(--navy);
+  border-color:var(--cream);
+}
+main{
+  max-width:760px;
+  margin:auto;
+  padding:12px 15px 30px;
+}
+.page{display:none}
+.page.active{display:block}
+h1,h2,h3,p{margin-top:0}
+h2{
+  color:white;
+  font-size:25px;
+  margin:12px 4px 16px;
+}
+h3{font-size:17px;margin-bottom:10px}
+p{line-height:1.5}
+.card{
+  background:var(--cream);
+  border-radius:22px;
+  padding:19px;
+  margin:13px 0;
+  box-shadow:0 8px 25px rgba(4,17,43,.12);
+}
+.card p:last-child{margin-bottom:0}
+.eyebrow{
+  color:var(--pink);
+  font-weight:800;
+  font-size:11px;
+  letter-spacing:1.5px;
+  text-transform:uppercase;
+}
+.muted{color:var(--muted)}
+.small{font-size:12px;color:var(--muted)}
+.stats{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:10px;
+}
+.stat{
+  background:white;
+  border:1px solid var(--line);
+  padding:15px;
+  border-radius:17px;
+}
+.stat strong{
+  display:block;
+  font-size:27px;
+  color:var(--navy);
+  margin-bottom:3px;
+}
+.stat span{font-size:12px;color:var(--muted)}
+.accent-line{
+  height:5px;
+  border-radius:10px;
+  background:linear-gradient(90deg,var(--pink),var(--orange));
+  margin:14px 0;
+}
+label{
+  display:block;
+  color:#596782;
+  font-size:12px;
+  font-weight:700;
+  margin:12px 0 5px;
+}
+input,select,textarea{
+  width:100%;
+  padding:13px;
+  border:1px solid #e2dfd7;
+  border-radius:13px;
+  background:white;
+  color:var(--text);
+  font:inherit;
+  font-size:15px;
+  outline:none;
+}
+input:focus,select:focus,textarea:focus{
+  border-color:var(--pink);
+  box-shadow:0 0 0 3px #e83e871c;
+}
+textarea{min-height:85px;resize:vertical}
+button{cursor:pointer;font-family:inherit}
+.action{
+  border:0;
+  border-radius:13px;
+  background:var(--pink);
+  color:white;
+  padding:13px 17px;
+  font-size:14px;
+  font-weight:750;
+  margin:7px 5px 3px 0;
+}
+.action.orange{background:var(--orange);color:#38210f}
+.action.navy{background:var(--navy);color:white}
+.action.light{
+  background:var(--softpink);
+  color:var(--pink);
+}
+.action.full{width:100%}
+.item{
+  background:white;
+  border:1px solid var(--line);
+  border-radius:16px;
+  padding:14px;
+  margin:9px 0;
+}
+.item strong{color:var(--navy)}
+.item p{margin:6px 0}
+.exercise{
+  border:1px solid var(--line);
+  border-radius:15px;
+  padding:13px;
+  margin:12px 0;
+  background:white;
+}
+.exercise h3{color:var(--pink)}
+.exercise-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:5px 10px;
+}
+.pill{
+  display:inline-block;
+  background:var(--softpink);
+  color:#a52b63;
+  border-radius:20px;
+  padding:6px 10px;
+  font-size:11px;
+  font-weight:750;
+  margin:3px;
+}
+.pill.orange{
+  background:var(--softorange);
+  color:#a95720;
+}
+.empty{
+  color:var(--muted);
+  text-align:center;
+  padding:20px 8px;
+  font-size:14px;
+}
+.goal-row{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.goal-row input{width:20px;height:20px;accent-color:var(--pink)}
+.goal-row label{margin:0;flex:1;color:var(--text);font-size:14px}
+.bottom-nav{
+  position:fixed;
+  bottom:0;left:0;right:0;
+  display:flex;
+  justify-content:space-around;
+  padding:11px 5px calc(11px + env(safe-area-inset-bottom));
+  background:var(--cream);
+  box-shadow:0 -5px 20px #071a3825;
+}
+.bottom-nav button{
+  border:0;background:none;
+  color:var(--muted);
+  font-size:11px;
+  font-weight:700;
+  padding:5px;
+}
+.bottom-nav button span{
+  display:block;
+  font-size:21px;
+  margin-bottom:3px;
+}
+.bottom-nav button.active{color:var(--pink)}
+hr{border:0;border-top:1px solid var(--line);margin:16px 0}
+@media(min-width:650px){
+  .stats{grid-template-columns:repeat(4,minmax(0,1fr))}
+}
+</style>
+</head>
+<body>
+
+<svg class="decor" viewBox="0 0 420 500" fill="none" aria-hidden="true">
+  <path d="M5 82 L20 87 L52 86 L90 96 L145 96 L210 96 Q245 125 265 190 Q280 255 310 315 Q340 380 350 440 L415 495"
+    stroke="#e83e87" stroke-width="4" stroke-linecap="round"/>
+  <path d="M5 145 L20 153 L45 145 L100 147 L160 164 Q190 195 215 255 Q235 315 260 355 Q290 410 305 470 L355 500"
+    stroke="#ff914d" stroke-width="4" stroke-linecap="round"/>
+</svg>
+
+<header>
+  <div class="brand">HYPR.</div>
+  <div class="tagline">YOUR TRAINING SPACE ✦</div>
+</header>
+
+<nav id="topNav">
+  <button class="active" onclick="showPage('home',this)">Home</button>
+  <button onclick="showPage('training',this)">Training</button>
+  <button onclick="showPage('plans',this)">Pläne</button>
+  <button onclick="showPage('goals',this)">Ziele</button>
+  <button onclick="showPage('profile',this)">Profil</button>
+</nav>
+
+<main>
+<section id="home" class="page active">
+  <h2>Hey, willkommen! ✨</h2>
+  <div class="card">
+    <div class="eyebrow">DEIN ÜBERBLICK</div>
+    <h3>Dein Fortschritt</h3>
+    <div class="stats">
+      <div class="stat"><strong id="total">0</strong><span>Trainings gesamt</span></div>
+      <div class="stat"><strong id="week">0</strong><span>Diese Woche</span></div>
+      <div class="stat"><strong id="goalCount">0</strong><span>Aktive Ziele</span></div>
+      <div class="stat"><strong id="planCount">0</strong><span>Trainingspläne</span></div>
+    </div>
+    <div class="accent-line"></div>
+    <p class="small">Dein Weg. Dein Tempo. Dein Fortschritt. 🧡</p>
+  </div>
+  <div class="card">
+    <div class="eyebrow">LETZTE EINHEIT</div>
+    <h3>Dein letztes Training</h3>
+    <div id="lastWorkout" class="muted">Hier erscheint dein letztes Training.</div>
+  </div>
+  <div class="card">
+    <div class="eyebrow">KLEINE MOTIVATION</div>
+    <h3>One step at a time. 🌷</h3>
+    <p>Du musst nicht jeden Tag alles schaffen. Jeder Eintrag ist ein kleiner Teil deiner Reise.</p>
+  </div>
+</section>
+
+<section id="training" class="page">
+  <h2>Training ✦</h2>
+  <div class="card">
+    <div class="eyebrow">NEUE EINHEIT</div>
+    <h3>Was hast du gemacht?</h3>
+    <label>Sportart</label>
+    <select id="sport">
+      <option>Krafttraining</option>
+      <option>Laufen</option>
+      <option>Radfahren</option>
+      <option>Schwimmen</option>
+      <option>Fitness</option>
+      <option>Yoga</option>
+      <option>Teamsport</option>
+      <option>Sonstiges</option>
+    </select>
+    <label>Datum</label>
+    <input type="date" id="workoutDate">
+    <label>Dauer in Minuten</label>
+    <input type="number" id="duration" min="0" placeholder="z. B. 45">
+    <label>Notizen</label>
+    <textarea id="notes" placeholder="Wie war dein Training?"></textarea>
+    <div class="accent-line"></div>
+    <h3>Deine Übungen 🏋️</h3>
+    <p class="small">Bei Krafttraining kannst du hier deine Übungen ergänzen.</p>
+    <div id="exerciseList"></div>
+    <button class="action light" onclick="addExercise()">＋ Übung hinzufügen</button>
+    <button class="action full" onclick="saveWorkout()">Training speichern ✨</button>
+  </div>
+  <div class="card">
+    <div class="eyebrow">DEINE GESCHICHTE</div>
+    <h3>Trainingsverlauf</h3>
+    <div id="history"></div>
+  </div>
+</section>
+
+<section id="plans" class="page">
+  <h2>Deine Pläne 📅</h2>
+  <div class="card">
+    <div class="eyebrow">PLAN ERSTELLEN</div>
+    <h3>Deine Trainingswoche</h3>
+    <label>Name des Plans</label>
+    <input id="planName" placeholder="z. B. Mein Wochenplan">
+    <div id="planDays"></div>
+    <button class="action full" onclick="savePlan()">Plan speichern</button>
+  </div>
+  <div class="card">
+    <div class="eyebrow">DEINE SAMMLUNG</div>
+    <h3>Gespeicherte Pläne</h3>
+    <div id="savedPlans"></div>
+  </div>
+</section>
+
+<section id="goals" class="page">
+  <h2>Goals & Achievements ⭐</h2>
+  <div class="card">
+    <div class="eyebrow">DEIN NÄCHSTER SCHRITT</div>
+    <h3>Neues Ziel setzen</h3>
+    <input id="goalInput" placeholder="z. B. Einen neuen Plan ausprobieren">
+    <button class="action full" onclick="addGoal()">＋ Ziel hinzufügen</button>
+  </div>
+  <div class="card">
+    <h3>Deine Ziele</h3>
+    <div id="goalList"></div>
+  </div>
+  <div class="card">
+    <div class="eyebrow">LITTLE WINS 🧡</div>
+    <h3>Deine Erfolge</h3>
+    <div id="achievements"></div>
+  </div>
+</section>
+
+<section id="profile" class="page">
+  <h2>Dein Profil ✨</h2>
+  <div class="card">
+    <div class="eyebrow">ABOUT YOU</div>
+    <h3>Persönliche Angaben</h3>
+    <label>Dein Name oder Spitzname</label>
+    <input id="username" placeholder="Wie sollen wir dich nennen?">
+    <button class="action full" onclick="saveProfile()">Profil speichern</button>
+  </div>
+  <div class="card">
+    <div class="eyebrow">DEINE DATEN</div>
+    <h3>Backup & Sicherheit</h3>
+    <p class="small">Deine Einträge werden in diesem Browser auf deinem Gerät gespeichert. Mit einem Backup kannst du sie sichern.</p>
+    <button class="action full" onclick="exportBackup()">Backup exportieren ↓</button>
+    <label>Backup-Datei auswählen</label>
+    <input type="file" id="backupFile" accept=".json,application/json">
+    <button class="action navy full" onclick="importBackup()">Backup wiederherstellen ↑</button>
+  </div>
+  <div class="card">
+    <div class="eyebrow">ÜBER HYPR</div>
+    <h3>HYPR. Your training space.</h3>
+    <p class="small">Version 1.0 · Made for your journey 💗</p>
+  </div>
+</section>
+</main>
+
+<div class="bottom-nav">
+  <button class="active" onclick="bottomGo('home',this)"><span>⌂</span>Home</button>
+  <button onclick="bottomGo('training',this)"><span>✦</span>Training</button>
+  <button onclick="bottomGo('plans',this)"><span>▤</span>Pläne</button>
+  <button onclick="bottomGo('goals',this)"><span>☆</span>Ziele</button>
+  <button onclick="bottomGo('profile',this)"><span>♡</span>Profil</button>
+</div>
+
+<script>
+const STORAGE_KEY="hypr_data";
+
+function emptyData(){
+  return {workouts:[],plans:[],goals:[],profile:{name:""}};
+}
+function loadData(){
+  try{
+    const saved=JSON.parse(localStorage.getItem(STORAGE_KEY));
+    if(saved && Array.isArray(saved.workouts) &&
+       Array.isArray(saved.plans) && Array.isArray(saved.goals)){
+      return {...emptyData(),...saved,profile:saved.profile||{name:""}};
+    }
+  }catch(e){}
+  return emptyData();
+}
+let data=loadData();
+
+function persist(){
+  try{
+    localStorage.setItem(STORAGE_KEY,JSON.stringify(data));
+    render();
+  }catch(e){
+    alert("Speichern hat nicht geklappt. Bitte prüfe den Speicherplatz deines Browsers.");
+  }
+}
+function escapeHTML(value){
+  return String(value??"").replace(/[&<>"']/g,c=>({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  }[c]));
+}
+function localDate(){
+  const d=new Date();
+  return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+}
+function showPage(id,button){
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+  document.querySelectorAll("nav button,.bottom-nav button").forEach(b=>b.classList.remove("active"));
+  if(button)button.classList.add("active");
+  document.querySelectorAll("nav button").forEach(b=>{
+    if(b.getAttribute("onclick")?.includes("'"+id+"'"))b.classList.add("active");
+  });
+  document.querySelectorAll(".bottom-nav button").forEach(b=>{
+    if(b.getAttribute("onclick")?.includes("'"+id+"'"))b.classList.add("active");
+  });
+  window.scrollTo(0,0);
+}
+function bottomGo(id,button){showPage(id,button)}
+
+function addExercise(){
+  const wrap=document.createElement("div");
+  wrap.className="exercise";
+  wrap.innerHTML=`
+    <h3>Neue Übung</h3>
+    <label>Übungsname</label>
+    <input class="ex-name" placeholder="z. B. Kniebeugen">
+    <div class="exercise-grid">
+      <div><label>Sätze</label><input class="ex-sets" type="number" min="0" placeholder="3"></div>
+      <div><label>Wiederholungen</label><input class="ex-reps" type="number" min="0" placeholder="10"></div>
+    </div>
+    <label>Gewicht in kg (optional)</label>
+    <input class="ex-weight" type="number" min="0" step="0.5" placeholder="Optional">
+    <button class="action light" onclick="this.closest('.exercise').remove()">Übung entfernen</button>
+  `;
+  document.getElementById("exerciseList").appendChild(wrap);
+}
+function saveWorkout(){
+  const date=document.getElementById("workoutDate").value;
+  if(!date){alert("Bitte wähle ein Datum aus.");return}
+  const exercises=[...document.querySelectorAll("#exerciseList .exercise")].map(e=>({
+    name:e.querySelector(".ex-name").value.trim(),
+    sets:e.querySelector(".ex-sets").value,
+    reps:e.querySelector(".ex-reps").value,
+    weight:e.querySelector(".ex-weight").value
+  })).filter(e=>e.name);
+  data.workouts.unshift({
+    id:Date.now(),
+    sport:document.getElementById("sport").value,
+    date,
+    duration:document.getElementById("duration").value,
+    notes:document.getElementById("notes").value.trim(),
+    exercises
+  });
+  document.getElementById("duration").value="";
+  document.getElementById("notes").value="";
+  document.getElementById("exerciseList").innerHTML="";
+  persist();
+  alert("Dein Training wurde gespeichert! 💗");
+}
+function deleteWorkout(id){
+  if(!confirm("Möchtest du dieses Training wirklich löschen?"))return;
+  data.workouts=data.workouts.filter(w=>w.id!==id);
+  persist();
+}
+function addGoal(){
+  const input=document.getElementById("goalInput");
+  if(!input.value.trim())return;
+  data.goals.push({id:Date.now(),text:input.value.trim(),done:false});
+  input.value="";
+  persist();
+}
+function toggleGoal(id){
+  const goal=data.goals.find(g=>g.id===id);
+  if(goal)goal.done=!goal.done;
+  persist();
+}
+function deleteGoal(id){
+  data.goals=data.goals.filter(g=>g.id!==id);
+  persist();
+}
+const weekdays=["Montag","Dienstag","Mittwoch","Donnerstag","Freitag","Samstag","Sonntag"];
+document.getElementById("planDays").innerHTML=weekdays.map((day,i)=>`
+  <label>${day}</label>
+  <textarea class="plan-day" data-day="${i}" placeholder="Was möchtest du machen?"></textarea>
+`).join("");
+function savePlan(){
+  const name=document.getElementById("planName").value.trim();
+  const days=[...document.querySelectorAll(".plan-day")].map(x=>x.value.trim());
+  if(!name){alert("Bitte gib deinem Plan einen Namen.");return}
+  data.plans.unshift({id:Date.now(),name,days});
+  document.getElementById("planName").value="";
+  document.querySelectorAll(".plan-day").forEach(x=>x.value="");
+  persist();
+  alert("Dein Trainingsplan wurde gespeichert! ✨");
+}
+function deletePlan(id){
+  if(!confirm("Diesen Plan löschen?"))return;
+  data.plans=data.plans.filter(p=>p.id!==id);
+  persist();
+}
+function saveProfile(){
+  data.profile.name=document.getElementById("username").value.trim();
+  persist();
+  alert("Profil gespeichert!");
+}
+function exportBackup(){
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");
+  a.href=url;
+  a.download="hypr-backup.json";
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+function importBackup(){
+  const file=document.getElementById("backupFile").files[0];
+  if(!file){alert("Bitte wähle zuerst eine Backup-Datei aus.");return}
+  const reader=new FileReader();
+  reader.onload=()=>{
+    try{
+      const imported=JSON.parse(reader.result);
+      if(!imported || !Array.isArray(imported.workouts) ||
+         !Array.isArray(imported.plans) || !Array.isArray(imported.goals)){
+        throw new Error("Ungültiges Backup");
+      }
+      if(!confirm("Deine aktuellen Daten werden durch die Backup-Daten ersetzt. Fortfahren?"))return;
+      data={...emptyData(),...imported,profile:imported.profile||{name:""}};
+      persist();
+      alert("Backup erfolgreich wiederhergestellt! 💗");
+    }catch(e){
+      alert("Die Datei ist kein gültiges HYPR-Backup.");
+    }
+  };
+  reader.readAsText(file);
+}
+function render(){
+  document.getElementById("total").textContent=data.workouts.length;
+  const today=new Date();
+  const monday=new Date(today);
+  monday.setHours(0,0,0,0);
+  monday.setDate(today.getDate()-(today.getDay()+6)%7);
+  const nextMonday=new Date(monday);
+  nextMonday.setDate(monday.getDate()+7);
+  const weekCount=data.workouts.filter(w=>{
+    const d=new Date(w.date+"T12:00:00");
+    return d>=monday && d<nextMonday;
+  }).length;
+  document.getElementById("week").textContent=weekCount;
+  document.getElementById("goalCount").textContent=data.goals.filter(g=>!g.done).length;
+  document.getElementById("planCount").textContent=data.plans.length;
+
+  const last=data.workouts[0];
+  document.getElementById("lastWorkout").innerHTML=last
+    ? `<strong>${escapeHTML(last.sport)}</strong><p class="small">${escapeHTML(last.date)} · ${escapeHTML(last.duration||"–")} Minuten</p>`
+    : "Hier erscheint dein letztes Training.";
+
+  document.getElementById("history").innerHTML=data.workouts.map(w=>`
+    <div class="item">
+      <span class="pill">${escapeHTML(w.sport)}</span>
+      <strong>${escapeHTML(w.date)}</strong>
+      <p class="small">${escapeHTML(w.duration||"–")} Minuten</p>
+      ${w.notes?`<p>${escapeHTML(w.notes)}</p>`:""}
+      ${(w.exercises||[]).map(e=>`
+        <p class="small">✦ ${escapeHTML(e.name)} · ${escapeHTML(e.sets||"–")} Sätze × ${escapeHTML(e.reps||"–")} Wdh. ${e.weight? "· "+escapeHTML(e.weight)+" kg":""}</p>
+      `).join("")}
+      <button class="action light" onclick="deleteWorkout(${Number(w.id)})">Eintrag löschen</button>
+    </div>
+  `).join("")||'<div class="empty">Noch keine Trainings gespeichert. Dein erster Eintrag wartet! ✨</div>';
+
+  document.getElementById("savedPlans").innerHTML=data.plans.map(p=>`
+    <div class="item">
+      <strong>${escapeHTML(p.name)}</strong>
+      ${(p.days||[]).map((d,i)=>d?`<p class="small"><b>${weekdays[i]}:</b> ${escapeHTML(d)}</p>`:"").join("")}
+      <button class="action light" onclick="deletePlan(${Number(p.id)})">Plan löschen</button>
+    </div>
+  `).join("")||'<div class="empty">Hier kannst du deine eigenen Pläne sammeln. 🌷</div>';
+
+  document.getElementById("goalList").innerHTML=data.goals.map(g=>`
+    <div class="item goal-row">
+      <input type="checkbox" ${g.done?"checked":""} onchange="toggleGoal(${Number(g.id)})">
+      <label>${escapeHTML(g.text)}</label>
+      <button class="action light" onclick="deleteGoal(${Number(g.id)})">×</button>
+    </div>
+  `).join("")||'<div class="empty">Noch keine Ziele eingetragen.</div>';
+
+  const achievements=[];
+  if(data.workouts.length>=1)achievements.push("🌱 Erstes Training gespeichert");
+  if(data.workouts.length>=5)achievements.push("⭐ 5 Trainings eingetragen");
+  if(data.workouts.length>=10)achievements.push("🧡 10 Trainings eingetragen");
+  if(data.plans.length>=1)achievements.push("📅 Ersten Trainingsplan erstellt");
+  if(data.goals.some(g=>g.done))achievements.push("✨ Ein Ziel abgehakt");
+  document.getElementById("achievements").innerHTML=achievements.length
+    ?achievements.map(a=>`<div class="item">${a}</div>`).join("")
+    :'<p class="muted">Deine ersten Erfolge erscheinen hier. Jeder kleine Schritt zählt!</p>';
+
+  document.getElementById("username").value=data.profile.name||"";
+}
+document.getElementById("workoutDate").value=localDate();
+render();
+</script>
+</body>
+</html>
