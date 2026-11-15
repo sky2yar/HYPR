@@ -541,6 +541,7 @@ input:focus, select:focus, textarea:focus {
     <div class="eyebrow">DEINE SAMMLUNG</div>
     <h3>Gespeicherte Pläne</h3>
     <div id="savedPlans"></div>
+    <div id="activePlan"></div>
   </div>
 </section>
 
@@ -723,6 +724,90 @@ function savePlan(){
   persist();
   alert("Dein Trainingsplan wurde gespeichert! ");
 }
+function startPlan(id){
+  const plan=data.plans.find(p=>p.id===id);
+  if(!plan)return;
+
+  const active=document.getElementById("activePlan");
+
+  active.innerHTML=`
+    <div class="item">
+      <div class="eyebrow">TRAINING STARTEN</div>
+      <h3>${escapeHTML(plan.name)}</h3>
+      <p class="small">Wähle deinen Trainingstag:</p>
+
+      ${(plan.days||[]).map((day,i)=>
+        day
+        ? `<button class="action" onclick="startPlanDay(${Number(id)},${i})">
+            ${weekdays[i]}
+           </button>`
+        : ""
+      ).join("")}
+    </div>
+  `;
+
+  active.scrollIntoView({behavior:"smooth"});
+}
+
+function startPlanDay(id,dayIndex){
+  const plan=data.plans.find(p=>p.id===id);
+  if(!plan)return;
+
+  const dayText=(plan.days||[])[dayIndex]||"";
+
+  const exercises=dayText
+    .replace(/\n/g," ")
+    .split(/\d+\.\s*/)
+    .map(x=>x.trim())
+    .filter(Boolean);
+
+  const active=document.getElementById("activePlan");
+
+  active.innerHTML=`
+    <div class="item">
+      <div class="eyebrow">HYPR TRAINING</div>
+      <h3>${weekdays[dayIndex]}</h3>
+
+      ${exercises.map((exercise,i)=>`
+        <div class="exercise">
+          <h3>${escapeHTML(exercise)}</h3>
+
+          <div class="exercise-grid">
+            <div>
+              <label>Sätze</label>
+              <input type="number"
+                     class="live-sets"
+                     min="0"
+                     placeholder="3">
+            </div>
+
+            <div>
+              <label>Wiederholungen</label>
+              <input type="number"
+                     class="live-reps"
+                     min="0"
+                     placeholder="10">
+            </div>
+          </div>
+
+          <label>Gewicht in kg</label>
+          <input type="number"
+                 class="live-weight"
+                 min="0"
+                 step="0.5"
+                 placeholder="z. B. 40">
+
+          <label class="goal-row">
+            <input type="checkbox" class="live-done">
+            <span>Übung erledigt ✓</span>
+          </label>
+        </div>
+      `).join("")}
+    </div>
+  `;
+
+  active.scrollIntoView({behavior:"smooth"});
+}
 function deletePlan(id){
   if(!confirm("Diesen Plan löschen?"))return;
   data.plans=data.plans.filter(p=>p.id!==id);
@@ -803,6 +888,7 @@ function render(){
     <div class="item">
       <strong>${escapeHTML(p.name)}</strong>
       ${(p.days||[]).map((d,i)=>d?`<p class="small"><b>${weekdays[i]}:</b> ${escapeHTML(d)}</p>`:"").join("")}
+      <button class="action full" onclick="startPlan(${Number(p.id)})">Training starten</button>
       <button class="action light" onclick="deletePlan(${Number(p.id)})">Plan löschen</button>
     </div>
   `).join("")||'<div class="empty">Hier kannst du deine eigenen Pläne sammeln. 🌷</div>';
