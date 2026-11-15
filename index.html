@@ -445,7 +445,7 @@ input:focus, select:focus, textarea:focus {
       <div class="stat"><strong id="planCount">0</strong><span>Trainingspläne</span></div>
     </div>
     <div class="accent-line"></div>
-    <p class="small">Dein Weg. Dein Tempo. Dein Fortschritt. 🧡</p>
+    <p class="small">Dein Weg. Dein Tempo. Dein Fortschritt. </p>
   </div>
   <div class="card">
     <div class="eyebrow">LETZTE EINHEIT</div>
@@ -514,7 +514,7 @@ input:focus, select:focus, textarea:focus {
     <label>Notizen</label>
     <textarea id="notes" placeholder="Wie war dein Training?"></textarea>
     <div class="accent-line"></div>
-    <h3>Deine Übungen 🏋️</h3>
+    <h3>Deine Übungen </h3>
     <p class="small">Bei Krafttraining kannst du hier deine Übungen ergänzen.</p>
     <div id="exerciseList"></div>
     <button class="action light" onclick="addExercise()">＋ Übung hinzufügen</button>
@@ -685,7 +685,7 @@ function saveWorkout(){
   document.getElementById("notes").value="";
   document.getElementById("exerciseList").innerHTML="";
   persist();
-  alert("Dein Training wurde gespeichert! 💗");
+  alert("Dein Training wurde gespeichert! ");
 }
 function deleteWorkout(id){
   if(!confirm("Möchtest du dieses Training wirklich löschen?"))return;
@@ -721,7 +721,7 @@ function savePlan(){
   document.getElementById("planName").value="";
   document.querySelectorAll(".plan-day").forEach(x=>x.value="");
   persist();
-  alert("Dein Trainingsplan wurde gespeichert! ✨");
+  alert("Dein Trainingsplan wurde gespeichert! ");
 }
 function deletePlan(id){
   if(!confirm("Diesen Plan löschen?"))return;
@@ -816,11 +816,11 @@ function render(){
   `).join("")||'<div class="empty">Noch keine Ziele eingetragen.</div>';
 
   const achievements=[];
-  if(data.workouts.length>=1)achievements.push("🌱 Erstes Training gespeichert");
-  if(data.workouts.length>=5)achievements.push("⭐ 5 Trainings eingetragen");
-  if(data.workouts.length>=10)achievements.push("🧡 10 Trainings eingetragen");
+  if(data.workouts.length>=1)achievements.push(" Erstes Training gespeichert");
+  if(data.workouts.length>=5)achievements.push(" 5 Trainings eingetragen");
+  if(data.workouts.length>=10)achievements.push(" 10 Trainings eingetragen");
   if(data.plans.length>=1)achievements.push("📅 Ersten Trainingsplan erstellt");
-  if(data.goals.some(g=>g.done))achievements.push("✨ Ein Ziel abgehakt");
+  if(data.goals.some(g=>g.done))achievements.push(" Ein Ziel abgehakt");
   document.getElementById("achievements").innerHTML=achievements.length
     ?achievements.map(a=>`<div class="item">${a}</div>`).join("")
     :'<p class="muted">Deine ersten Erfolge erscheinen hier. Jeder kleine Schritt zählt!</p>';
