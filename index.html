@@ -460,6 +460,38 @@ input:focus, select:focus, textarea:focus {
   </div>
 </section>
 
+<section id="running" class="page">
+  <h2>🏃 HYPR RUN</h2>
+  <div class="card">
+    <div class="eyebrow">GPS LAUFTRACKER</div>
+    <h3>Dein Lauf. Dein Tempo.</h3>
+    <div class="stats">
+      <div class="stat">
+        <strong id="runTime">00:00:00</strong>
+        <span>Dauer</span>
+      </div>
+      <div class="stat">
+        <strong id="runDistance">0,00</strong>
+        <span>Distanz (km)</span>
+      </div>
+      <div class="stat">
+        <strong id="runPace">--:--</strong>
+        <span>Pace (min/km)</span>
+      </div>
+      <div class="stat">
+        <strong id="runGPS">○</strong>
+        <span>GPS</span>
+      </div>
+    </div>
+    <div class="accent-line"></div>
+    <div id="runMap" style="height:320px;background:#17121c;border-radius:18px;display:flex;align-items:center;justify-content:center;color:#ff2c9c;text-align:center;padding:20px">
+      🗺️ Deine Laufkarte erscheint hier
+    </div>
+    <button class="action full" id="runStart" onclick="startRun()">▶ Lauf starten</button>
+    <button class="action navy full" onclick="stopRun()">■ Lauf beenden</button>
+    <p class="small">GPS benötigt deine Standortfreigabe. Die Aufzeichnung funktioniert nur, solange die Webseite aktiv bleibt.</p>
+  </div>
+</section>
 <section id="training" class="page">
   <h2>Training ✦</h2>
   <div class="card">
@@ -798,6 +830,139 @@ function render(){
 }
 document.getElementById("workoutDate").value=localDate();
 render();
+
+let runWatch = null;
+let runTimer = null;
+let runStarted = 0;
+let runSeconds = 0;
+let runMeters = 0;
+let runPoints = [];
+let runActive = false;
+
+function runClock(seconds) {
+  const h = String(Math.floor(seconds / 3600)).padStart(2, "0");
+  const m = String(Math.floor(seconds / 60) % 60).padStart(2, "0");
+  const s = String(seconds % 60).padStart(2, "0");
+  return `${h}:${m}:${s}`;
+}
+
+function runDistanceBetween(a, b) {
+  const rad = Math.PI / 180;
+  const dLat = (b.lat - a.lat) * rad;
+  const dLon = (b.lon - a.lon) * rad;
+  const x =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos(a.lat * rad) *
+    Math.cos(b.lat * rad) *
+    Math.sin(dLon / 2) ** 2;
+  return 6371000 * 2 * Math.atan2(Math.sqrt(x), Math.sqrt(1 - x));
+}
+
+function updateRunDisplay() {
+  document.getElementById("runTime").textContent = runClock(runSeconds);
+  document.getElementById("runDistance").textContent =
+    (runMeters / 1000).toFixed(2).replace(".", ",");
+
+  const pace = runMeters > 20 ? runSeconds / (runMeters / 1000) : 0;
+  document.getElementById("runPace").textContent =
+    pace > 0 && Number.isFinite(pace)
+      ? `${String(Math.floor(pace / 60)).padStart(2, "0")}:${String(Math.floor(pace % 60)).padStart(2, "0")}`
+      : "--:--";
+}
+
+function startRun() {
+  if (runActive) return;
+
+  if (!navigator.geolocation) {
+    alert("GPS wird von diesem Browser nicht unterstützt.");
+    return;
+  }
+
+  runActive = true;
+  runSeconds = 0;
+  runMeters = 0;
+  runPoints = [];
+  runStarted = Date.now();
+  updateRunDisplay();
+
+  document.getElementById("runGPS").textContent = "…";
+  document.getElementById("runMap").textContent =
+    "📍 GPS wird gesucht. Bitte Standortzugriff erlauben.";
+
+  runTimer = setInterval(() => {
+    runSeconds = Math.floor((Date.now() - runStarted) / 1000);
+    updateRunDisplay();
+  }, 1000);
+
+  runWatch = navigator.geolocation.watchPosition(
+    position => {
+      if (!runActive) return;
+
+      const p = {
+        lat: position.coords.latitude,
+        lon: position.coords.longitude
+      };
+
+      if (position.coords.accuracy > 50) {
+        document.getElementById("runGPS").textContent = "△";
+        return;
+      }
+
+      const last = runPoints[runPoints.length - 1];
+
+      if (last) {
+        const meters = runDistanceBetween(last, p);
+        if (meters >= 3 && meters < 100) {
+          runMeters += meters;
+          runPoints.push(p);
+        }
+      } else {
+        runPoints.push(p);
+      }
+
+      document.getElementById("runGPS").textContent = "●";
+      document.getElementById("runMap").textContent =
+        "📍 GPS aktiv · " + runPoints.length +
+        " Messpunkte erfasst. Die Kartenansicht ergänzen wir als Nächstes.";
+
+      updateRunDisplay();
+    },
+    error => {
+      document.getElementById("runGPS").textContent = "×";
+      document.getElementById("runMap").textContent =
+        "GPS nicht verfügbar. Bitte Standortfreigabe prüfen.";
+
+      if (error.code === 1) {
+        alert("Bitte erlaube HYPR den Standortzugriff in Safari.");
+        stopRun();
+      }
+    },
+    {
+      enableHighAccuracy: true,
+      maximumAge: 0,
+      timeout: 15000
+    }
+  );
+}
+
+function stopRun() {
+  if (!runActive) return;
+
+  runActive = false;
+  clearInterval(runTimer);
+
+  if (runWatch !== null) {
+    navigator.geolocation.clearWatch(runWatch);
+    runWatch = null;
+  }
+
+  document.getElementById("runGPS").textContent = "○";
+  document.getElementById("runMap").textContent =
+    "🏁 Lauf beendet · " +
+    (runMeters / 1000).toFixed(2).replace(".", ",") +
+    " km aufgezeichnet.";
+}
+
 </script>
 </body>
 </html>
