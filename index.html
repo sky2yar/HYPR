@@ -252,6 +252,163 @@ hr{border:0;border-top:1px solid var(--line);margin:16px 0}
   .stats{grid-template-columns:repeat(4,minmax(0,1fr))}
 }
 </style>
+
+/* HYPR NEON DESIGN */
+:root {
+  --navy: #08080d;
+  --navy2: #14121d;
+  --cream: #17141f;
+  --pink: #ff2c9c;
+  --orange: #c63cff;
+  --text: #ffffff;
+  --muted: #aaa4bb;
+  --line: #403047;
+  --softpink: #34152d;
+  --softorange: #291a3b;
+}
+
+body {
+  background:
+    radial-gradient(ellipse at 95% 5%,
+      rgba(255,44,156,.24), transparent 42%),
+    radial-gradient(ellipse at 0% 65%,
+      rgba(145,45,255,.16), transparent 45%),
+    #08080d;
+  color: white;
+}
+
+.decor {
+  display: none;
+}
+
+header {
+  padding-top: 35px;
+}
+
+.brand {
+  font-size: 43px;
+  font-weight: 950;
+  letter-spacing: 5px;
+  color: white;
+  text-shadow: 0 0 24px rgba(255,44,156,.5);
+}
+
+.tagline {
+  color: #ff78c4;
+}
+
+nav {
+  background: rgba(8,8,13,.94);
+  border-bottom: 1px solid #302035;
+}
+
+nav button {
+  border-color: #483047;
+  background: #17121c;
+}
+
+nav button.active {
+  background: #ff2c9c;
+  border-color: #ff2c9c;
+  color: white;
+  box-shadow: 0 0 18px #ff2c9c70;
+}
+
+h2 {
+  font-weight: 850;
+  letter-spacing: -.5px;
+}
+
+.card {
+  background: linear-gradient(
+    145deg, #211925, #121017
+  );
+  border: 1px solid #49304b;
+  box-shadow: 0 8px 30px #0007;
+}
+
+.eyebrow {
+  color: #ff58b2;
+}
+
+.stat, .item, .exercise {
+  background: #1b1722;
+  border: 1px solid #46304b;
+}
+
+.stat strong, .item strong {
+  color: white;
+}
+
+label {
+  color: #d5c4d8;
+}
+
+input, select, textarea {
+  background: #100e15;
+  color: white;
+  border: 1px solid #523653;
+}
+
+input:focus, select:focus, textarea:focus {
+  border-color: #ff2c9c;
+  box-shadow: 0 0 0 3px #ff2c9c30;
+}
+
+.action {
+  background: linear-gradient(
+    110deg, #ff2c9c, #e42bcb
+  );
+  color: white;
+  box-shadow: 0 4px 18px #ff2c9c40;
+}
+
+.action.orange {
+  background: #ad39ed;
+  color: white;
+}
+
+.action.navy {
+  background: #302039;
+}
+
+.action.light {
+  background: #3b1c35;
+  color: #ff8bcc;
+}
+
+.accent-line {
+  background: linear-gradient(
+    90deg, #ff2c9c, #b936ff
+  );
+  box-shadow: 0 0 15px #ff2c9c70;
+}
+
+.pill {
+  background: #3c1a37;
+  color: #ff8bcc;
+}
+
+.pill.orange {
+  background: #30203e;
+  color: #d39aff;
+}
+
+.bottom-nav {
+  background: #100d15;
+  border-top: 1px solid #402440;
+  box-shadow: 0 -5px 25px #0008;
+}
+
+.bottom-nav button.active {
+  color: #ff2c9c;
+  text-shadow: 0 0 12px #ff2c9c70;
+}
+
+.goal-row label {
+  color: white;
+}
+
 </head>
 <body>
 
