@@ -885,13 +885,89 @@ function render(){
   `).join("")||'<div class="empty">Noch keine Trainings gespeichert. Dein erster Eintrag wartet! ✨</div>';
 
   document.getElementById("savedPlans").innerHTML=data.plans.map(p=>`
-    <div class="item">
-      <strong>${escapeHTML(p.name)}</strong>
-      ${(p.days||[]).map((d,i)=>d?`<p class="small"><b>${weekdays[i]}:</b> ${escapeHTML(d)}</p>`:"").join("")}
-      <button class="action full" onclick="startPlan(${Number(p.id)})">Training starten</button>
-      <button class="action light" onclick="deletePlan(${Number(p.id)})">Plan löschen</button>
+  <div class="item">
+    <div class="eyebrow">WEEK OVERVIEW</div>
+    <h3>${escapeHTML(p.name)}</h3>
+
+    <div style="
+      display:grid;
+      grid-template-columns:repeat(7,1fr);
+      gap:6px;
+      margin:16px 0;
+    ">
+      ${(p.days||[]).map((day,i)=>`
+        <button
+          onclick="startPlanDay(${Number(p.id)},${i})"
+          style="
+            border:1px solid ${day ? '#ff2c9c' : '#3d3442'};
+            background:${day ? '#251522' : '#151219'};
+            color:${day ? '#fff' : '#77717d'};
+            border-radius:14px;
+            padding:10px 2px;
+            font-weight:800;
+            font-size:11px;
+          ">
+          ${["MO","DI","MI","DO","FR","SA","SO"][i]}
+          <span style="
+            display:block;
+            margin-top:7px;
+            font-size:15px;
+            color:${day ? '#ff2c9c' : '#555'};
+          ">
+            ${day ? "●" : "–"}
+          </span>
+        </button>
+      `).join("")}
     </div>
-  `).join("")||'<div class="empty">Hier kannst du deine eigenen Pläne sammeln. 🌷</div>';
+
+    <div style="
+      border-top:1px solid #403047;
+      margin-top:15px;
+      padding-top:15px;
+    ">
+      ${(p.days||[]).map((day,i)=>`
+        <div
+          onclick="startPlanDay(${Number(p.id)},${i})"
+          style="
+            display:flex;
+            gap:12px;
+            align-items:flex-start;
+            padding:13px 0;
+            border-bottom:1px solid #332638;
+            cursor:pointer;
+          ">
+          <strong style="
+            width:34px;
+            color:${day ? '#ff2c9c' : '#777'};
+          ">
+            ${["Mo","Di","Mi","Do","Fr","Sa","So"][i]}
+          </strong>
+
+          <div style="flex:1">
+            ${
+              day
+              ? `<span style="color:white;font-weight:750">
+                   ${escapeHTML(day)}
+                 </span>`
+              : `<span style="color:#6e6874">REST</span>`
+            }
+          </div>
+
+          ${day ? `<span style="color:#ff2c9c">›</span>` : ""}
+        </div>
+      `).join("")}
+    </div>
+
+    <p class="small" style="margin-top:15px">
+      Tippe auf einen Trainingstag, um Übungen, Sätze, Reps und Gewicht einzutragen.
+    </p>
+
+    <button class="action light"
+            onclick="deletePlan(${Number(p.id)})">
+      Plan löschen
+    </button>
+  </div>
+`).join("") || '<div class="empty">Noch kein Trainingsplan gespeichert.</div>';
 
   document.getElementById("goalList").innerHTML=data.goals.map(g=>`
     <div class="item goal-row">
